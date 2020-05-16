@@ -1,0 +1,63 @@
+
+
+.UD_container{
+    margin-top: 60px;
+}
+    
+p.UD_plugin_quote {
+    font-size: 16px;
+    font-family: cursive;
+    font-weight: 100;    
+}
+
+.UD_small_head{
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+.UD_big_head{
+    margin-top: 10px;
+    font-size: 22px;
+}
+
+.UD_section_container{
+    margin-top: 2em;
+    margin-left: 1em;
+}
+
+/* Overrite css */
+
+a:focus, a:focus .media-icon img, .wp-person a:focus .gravatar {
+    color: #124964;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0), 0 0 2px 1px rgba(30, 140, 190, 0) !important;
+    outline: 1px solid transparent;
+}
+
+.setting-forms{
+    border: 2px solid gray;
+    border-radius: 15px;
+    margin: 1em;
+    padding: 2em;
+}
+
+.heading_table{
+    font-family: cursive;
+    margin-bottom: 10px;
+}
+
+.btn_add_field{
+    margin-top: 10px !important;
+}
+
+    
+.template_element select{
+    display: inline !important;
+}
+    
+.parent_container .template_element{
+    margin-top: 10px;
+}
+
+span.UD-direction-icon img {
+    height: 50px;
+}
