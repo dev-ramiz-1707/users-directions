@@ -1,4 +1,3 @@
-
 <?php
 
 global $wpdb;
@@ -30,8 +29,10 @@ function UD_get_settings_plugin_data(){
   if( $wpdb->get_var( $sql_query ) == $UD_table_settings){
     $UD_get_settings_plugin_data = $wpdb->get_results("SELECT * FROM $UD_table_settings where UD_meta_key='UD_delete_plugin_data'");
     
+    $UD_get_settings_plugin_data_test = $wpdb->get_row( "SELECT * FROM $UD_table_settings where UD_meta_key='UD_delete_plugin_data'" );
+    
     //echo "<pre>";
-    //print_r($UD_get_settings_plugin_data);
+    //print_r($UD_get_settings_plugin_data_test);
     //echo "</pre>";
     return $UD_get_settings_plugin_data[0]->UD_meta_value;
   }else{
@@ -123,16 +124,14 @@ function UD_get_select_page_dropdown($role_key, $selected_role_key){
 
                 <?php
                       //$i_inc = 1;
-                      foreach(UD_get_roles() as $UD_role_key => $UD_role_key){
-                          $UD_find_in_db = $wpdb->get_results("SELECT * FROM $UD_role_directions where role = '".$UD_role_key."'");
-                          //echo "<pre>";
-                          //print_r($UD_find_in_db[0]->redirect_url);
-                          //echo "</pre>";
+                      foreach(UD_get_roles() as $UD_role_key => $UD_role_value){
+                          $UD_find_in_db = $wpdb->get_results("SELECT * FROM $UD_role_directions where role = '".$UD_role_key."'"); 
+						  //print_r($UD_find_in_db);
                         ?>
 
                           <div class="form-row">
                               <div class="col mt-2">
-                                <input type="text" class="form-control" value="<?php echo $UD_role_key; ?>" placeholder="<?php echo $UD_role_key['name']; ?>" readonly>
+                                <input type="text" class="form-control" value="<?php echo $UD_role_key; ?>" placeholder="<?php echo $UD_role_value['name']; ?>" readonly>
                               </div>
                               <div class="col mt-2">
                                 <!-- <input type="text" class="form-control" placeholder="Last name"> -->

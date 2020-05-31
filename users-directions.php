@@ -4,11 +4,11 @@
  */
 /*
 Plugin Name: User's directions   
-Plugin URI: http://wp_user_redirection.com
+Plugin URI: https://github.com/dev-ramiz-1707/users-directions
 Description:This plugin will help redirect the user to a page based on the thair role.
 Version: 1.0.0
 Author: Ramiz Theba
-Author URI: https://in.pinterest.com/dev_ramiz_1707/
+Author URI: https://github.com/dev-ramiz-1707
 License: GPLv2 or later
 Text Domain: user-directions
 */
@@ -29,6 +29,8 @@ Copyright 2005-2015 Automattic, Inc.
 
 
 defined( 'ABSPATH' ) or die( 'Hey, what are you doing here? You silly human!' );
+
+
 class UD_Activation_process
 {
 	function __construct() {
@@ -73,17 +75,10 @@ class UD_Activation_process
 
     
 	function deactivate() {
-		// flush rewrite rules
+		// flush rewrite rules		
 		flush_rewrite_rules();
     }
     
-
-	function uninstall() {
-		// delete CPT
-		// delete all the plugin data from the DB
-    }
-
-
     // Create table fucntion for plguin 
     function UD_Create_table(){
         global $wpdb;
@@ -132,13 +127,13 @@ class UD_Activation_process
         }else{
             
             // styles 
-            wp_enqueue_style('bootstrap_4_css', plugins_url('assets/css/bootstrap.min.css',__FILE__ ));
-            wp_enqueue_style('bootstrap_4_grid_css', plugins_url('assets/css/bootstrap-grid.min.css',__FILE__ ));
+            wp_enqueue_style('bootstrap_4_css', '//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css');
+            //wp_enqueue_style('bootstrap_4_grid_css', plugins_url('assets/css/bootstrap-grid.min.css',__FILE__ ));
             wp_enqueue_style('US_custom_css', plugins_url('assets/css/UD_custom.css',__FILE__ ));
 
             // scripts
-            wp_enqueue_script('bootstrap_4_js', plugins_url('assets/js/bootstrap.min.js',__FILE__ ), ['jquery'], time(), true);
-            wp_enqueue_script('bootstrap_4_bundle_js', plugins_url('assets/js/bootstrap.bundle.min.js',__FILE__ ), ['jquery'], time(), true);
+            wp_enqueue_script('bootstrap_4_js', '//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js', ['jquery'], time(), true);
+            //wp_enqueue_script('bootstrap_4_bundle_js', plugins_url('assets/js/bootstrap.bundle.min.js',__FILE__ ), ['jquery'], time(), true);
             wp_enqueue_script('sweetalert_js', plugins_url('assets/js/sweetalert.min.js',__FILE__ ), ['jquery'], time(), true);
             
             //wp_enqueue_script('UD_ajax_js', plugins_url('assets/js/UD_ajax.js',__FILE__ ), ['jquery'], time(), true);
@@ -173,24 +168,24 @@ class UD_Activation_process
 
 
     function UD_ajax_user_role_direction_update(){
-        global $wpdb;
-        $UD_table = $wpdb->prefix . 'ud_role_directions';
-    
-      
+        global $wpdb, $wp_roles;
+		
+		$registerd_roles = $wp_roles->roles;
+        $UD_table = $wpdb->prefix . 'ud_role_directions';        
 
         if( isset($_POST['UD_directions']) ){
-
+			
             if(is_array($_POST['UD_directions'])){
-                $UD_directions = $_POST['UD_directions'];
-
-                foreach($UD_directions as $UD_key => $UD_value){
-
-                    //echo "SELECT * FROM $UD_table where role = '".$UD_key."'";
+				$UD_directions_final = array();				
+				
+				$unfilter_data = $_POST['UD_directions'];				
+				
+				// Sanitize array 
+				$UD_directions_final = filter_var_array($unfilter_data, FILTER_VALIDATE_INT);			
+				
+                foreach($UD_directions_final as $UD_key => $UD_value){
+                    
                     $UD_find_in_db = $wpdb->get_results("SELECT * FROM $UD_table where role = '".$UD_key."'");
-        
-                    // echo "<pre>";
-                    // print_r($UD_find_in_db);
-                    // echo "</pre>";
         
                     if(!empty($UD_find_in_db)){
         
@@ -323,3 +318,22 @@ register_activation_hook( __FILE__, array( $UD_Activation_process, 'activate' ) 
 // deactivation
 register_deactivation_hook( __FILE__, array( $UD_Activation_process, 'deactivate' ) );
 // uninstall
+//register_uninstall_hook(__FILE__, 'uninstall' );
+
+// function uninstall(){
+//     global $wpdb;
+//     $UD_table_role_directions = $wpdb->prefix . 'ud_role_directions';
+//     $UD_table_settings = $wpdb->prefix . 'ud_settings';
+    
+//     $UD_get_settings_plugin_data = $wpdb->get_row( "SELECT * FROM $UD_table_settings where UD_meta_key='UD_delete_plugin_data'" );
+
+//     if( $UD_get_settings_plugin_data->UD_meta_key == "UD_delete_plugin_data" && $UD_get_settings_plugin_data->UD_meta_value == "false" ){            
+        
+//         $sql1 = "DROP TABLE IF EXISTS $UD_table_role_directions";
+//         $wpdb->query($sql1);
+
+//         $sql2 = "DROP TABLE IF EXISTS $UD_table_settings";
+//         $wpdb->query($sql2);
+        
+//     }
+// }
