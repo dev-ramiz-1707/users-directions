@@ -127,24 +127,19 @@ class UD_Activation_process
         }else{
             
             // styles 
-            wp_enqueue_style('bootstrap_4_css', '//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css');
-            //wp_enqueue_style('bootstrap_4_grid_css', plugins_url('assets/css/bootstrap-grid.min.css',__FILE__ ));
+            wp_enqueue_style('bootstrap_4_css', plugins_url('assets/css/bootstrap.min.css',__FILE__ ));            
             wp_enqueue_style('US_custom_css', plugins_url('assets/css/UD_custom.css',__FILE__ ));
 
             // scripts
-            wp_enqueue_script('bootstrap_4_js', '//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js', ['jquery'], time(), true);
-            //wp_enqueue_script('bootstrap_4_bundle_js', plugins_url('assets/js/bootstrap.bundle.min.js',__FILE__ ), ['jquery'], time(), true);
+            wp_enqueue_script('bootstrap_4_js', plugins_url('assets/js/bootstrap.min.js',__FILE__ ), ['jquery'], time(), true);            
             wp_enqueue_script('sweetalert_js', plugins_url('assets/js/sweetalert.min.js',__FILE__ ), ['jquery'], time(), true);
-            
-            //wp_enqueue_script('UD_ajax_js', plugins_url('assets/js/UD_ajax.js',__FILE__ ), ['jquery'], time(), true);
 
+            // ajax script 
             wp_register_script( 'UD_ajax_js', plugins_url('assets/js/UD_ajax.js',__FILE__ ), [ 'jquery' ], time(), true );
             wp_localize_script( 'UD_ajax_js', 'ajax_data', [ 'ajax_url' => admin_url('admin-ajax.php' ) ] );        
             wp_enqueue_script( 'UD_ajax_js' );
 
-
-            wp_enqueue_script('UD_custom_js', plugins_url('assets/js/UD_custom.js',__FILE__ ), ['jquery'], time(), true);
-            //wp_enqueue_script('ln_script', plugins_url('inc/main_script.js', __FILE__), ['jquery'], false, true);
+            wp_enqueue_script('UD_custom_js', plugins_url('assets/js/UD_custom.js',__FILE__ ), ['jquery'], time(), true);            
         
         } 
         
@@ -176,12 +171,12 @@ class UD_Activation_process
         if( isset($_POST['UD_directions']) ){
 			
             if(is_array($_POST['UD_directions'])){
-				$UD_directions_final = array();				
+				$UD_directions_final = array();
 				
-				$unfilter_data = $_POST['UD_directions'];				
+                $unfilter_data = is_array( $_POST['UD_directions'] ) ? $_POST['UD_directions'] : array();
 				
 				// Sanitize array 
-				$UD_directions_final = filter_var_array($unfilter_data, FILTER_VALIDATE_INT);			
+				$UD_directions_final = filter_var_array($unfilter_data, FILTER_VALIDATE_INT);
 				
                 foreach($UD_directions_final as $UD_key => $UD_value){
                     
@@ -191,7 +186,7 @@ class UD_Activation_process
         
                         //echo "update<br>";
         
-                        $UD_settings_insert_update = $wpdb->update( 
+                        $UD_settings_insert_update = $wpdb->update(
                             $UD_table,
                             array(                        
                                 'redirect_url' => $UD_value
