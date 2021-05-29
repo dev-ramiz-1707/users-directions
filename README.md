@@ -1,4 +1,4 @@
-# users-directions
+# Users Directions
 WordPress Plugin for user redirection  
 
 
