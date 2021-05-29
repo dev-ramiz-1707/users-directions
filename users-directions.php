@@ -27,8 +27,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 Copyright 2005-2015 Automattic, Inc.
 */
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 defined( 'ABSPATH' ) or die( 'Hey, what are you doing here? You silly human!' );
+
+/**
+ * Currently plugin version.
+ * Start at version 1.0.0 and use SemVer - https://semver.org
+ * Rename this for your plugin and update it as you release new versions.
+ */
+define( 'UD_VERSION', '1.0.0' );
 
 
 class UD_Activation_process
@@ -64,10 +75,7 @@ class UD_Activation_process
         
         // generated a Page on wp dashbaord
         $this->UD_generate_wp_admin_menu();
-               
-        //Redirect user to selected pages
-        //$this->UD_User_S_Directions();
-
+     
 		// flush rewrite rules
         flush_rewrite_rules();
         
@@ -100,7 +108,6 @@ class UD_Activation_process
             dbDelta($sql);
         }
 
-        // wp_ud_settings
         // create the UD plugin settings table
         if($wpdb->get_var("show tables like '$UD_table_settings'") != $UD_table_settings){
             
@@ -116,7 +123,6 @@ class UD_Activation_process
         }
     }
 
-
     // enqueue script and styles
     function UD_enqueue_script_and_style(){
 
@@ -127,30 +133,22 @@ class UD_Activation_process
         }else{
             
             // styles 
-            wp_enqueue_style('bootstrap_4_css', '//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css');
-            //wp_enqueue_style('bootstrap_4_grid_css', plugins_url('assets/css/bootstrap-grid.min.css',__FILE__ ));
+            wp_enqueue_style('bootstrap_4_css', '//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css');            
             wp_enqueue_style('US_custom_css', plugins_url('assets/css/UD_custom.css',__FILE__ ));
 
             // scripts
-            wp_enqueue_script('bootstrap_4_js', '//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js', ['jquery'], time(), true);
-            //wp_enqueue_script('bootstrap_4_bundle_js', plugins_url('assets/js/bootstrap.bundle.min.js',__FILE__ ), ['jquery'], time(), true);
-            wp_enqueue_script('sweetalert_js', plugins_url('assets/js/sweetalert.min.js',__FILE__ ), ['jquery'], time(), true);
-            
-            //wp_enqueue_script('UD_ajax_js', plugins_url('assets/js/UD_ajax.js',__FILE__ ), ['jquery'], time(), true);
+            wp_enqueue_script('bootstrap_4_js', '//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js', ['jquery'], time(), true);            
+            wp_enqueue_script('sweetalert_js', plugins_url('assets/js/sweetalert.min.js',__FILE__ ), ['jquery'], time(), true);        
 
             wp_register_script( 'UD_ajax_js', plugins_url('assets/js/UD_ajax.js',__FILE__ ), [ 'jquery' ], time(), true );
             wp_localize_script( 'UD_ajax_js', 'ajax_data', [ 'ajax_url' => admin_url('admin-ajax.php' ) ] );        
             wp_enqueue_script( 'UD_ajax_js' );
 
-
             wp_enqueue_script('UD_custom_js', plugins_url('assets/js/UD_custom.js',__FILE__ ), ['jquery'], time(), true);
-            //wp_enqueue_script('ln_script', plugins_url('inc/main_script.js', __FILE__), ['jquery'], false, true);
         
         } 
-        
-        
-    }
 
+    }
     
     // ajax call for updates role user redirection 
     function UD_generate_wp_admin_menu(){        
@@ -166,7 +164,6 @@ class UD_Activation_process
 
     }
 
-
     function UD_ajax_user_role_direction_update(){
         global $wpdb, $wp_roles;
 		
@@ -178,9 +175,8 @@ class UD_Activation_process
             if(is_array($_POST['UD_directions'])){
 				$UD_directions_final = array();				
 				
-				$unfilter_data = $_POST['UD_directions'];				
+				$unfilter_data = $_POST['UD_directions'];							
 				
-				// Sanitize array 
 				$UD_directions_final = filter_var_array($unfilter_data, FILTER_VALIDATE_INT);			
 				
                 foreach($UD_directions_final as $UD_key => $UD_value){
@@ -188,8 +184,6 @@ class UD_Activation_process
                     $UD_find_in_db = $wpdb->get_results("SELECT * FROM $UD_table where role = '".$UD_key."'");
         
                     if(!empty($UD_find_in_db)){
-        
-                        //echo "update<br>";
         
                         $UD_settings_insert_update = $wpdb->update( 
                             $UD_table,
@@ -209,8 +203,6 @@ class UD_Activation_process
         
                     }else{
         
-                        //echo "insert<br>";
-        
                         $UD_settings_insert_update = $wpdb->replace( 
                             $UD_table, 
                             array(
@@ -222,18 +214,16 @@ class UD_Activation_process
                                 '%s'                
                             ) 
                         );
-        
+
                     }   
                    
                 }
 
-
                 die();
-            }    
+            }
 
             die();
         }
-
 
         die();
     }
@@ -243,7 +233,7 @@ class UD_Activation_process
         
         global $wpdb;
 
-        $key = "UD_delete_plugin_data"; //$_POST['Ud_is_delete_database'];
+        $key = "UD_delete_plugin_data";
 
         if( isset($_POST['Ud_is_delete_database']) ){
 
@@ -267,11 +257,8 @@ class UD_Activation_process
                     '%s'
                 )
             );
-
-            
            
         }
-
         
         die();
     }
