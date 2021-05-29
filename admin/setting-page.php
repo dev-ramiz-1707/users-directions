@@ -3,6 +3,7 @@
 global $wpdb;
 global $UD_settings;
 global $UD_role_directions;
+$text_domain = "user-directions";
 
 $UD_role_directions = $wpdb->prefix . 'ud_role_directions';
 $UD_settings = $wpdb->prefix . 'ud_settings';
@@ -11,9 +12,9 @@ function UD_get_roles() {
   global $wp_roles;
 
   $all_roles = $wp_roles->roles;
-  //$editable_roles = apply_filters('editable_roles', $all_roles);
 
   return $all_roles;
+
 }
 
 function UD_get_settings_plugin_data(){
@@ -21,25 +22,20 @@ function UD_get_settings_plugin_data(){
   global $wpdb;
   $UD_table_settings = $wpdb->prefix . 'ud_settings';
 
-  $sql_query = $wpdb->prepare(  'SHOW TABLES LIKE %s', $UD_table_settings );
-  //$UD_table_settings = $wpdb->prefix . 'ud_settings';
-
-  //echo $UD_table_settings;
+  $sql_query = $wpdb->prepare(  'SHOW TABLES LIKE %s', $UD_table_settings );  
 
   if( $wpdb->get_var( $sql_query ) == $UD_table_settings){
     $UD_get_settings_plugin_data = $wpdb->get_results("SELECT * FROM $UD_table_settings where UD_meta_key='UD_delete_plugin_data'");
     
     $UD_get_settings_plugin_data_test = $wpdb->get_row( "SELECT * FROM $UD_table_settings where UD_meta_key='UD_delete_plugin_data'" );
     
-    //echo "<pre>";
-    //print_r($UD_get_settings_plugin_data_test);
-    //echo "</pre>";
     return $UD_get_settings_plugin_data[0]->UD_meta_value;
+
   }else{
-    return "false";
+
+    return false;
+
   }
-  
-  //return $UD_get_settings;
 
 }
 
@@ -63,7 +59,7 @@ function UD_get_select_page_dropdown($role_key, $selected_role_key){
           $is_selected = "";
         }
         echo "<option value='".$value_page->ID."' ".$is_selected.">".$value_page->post_title."</option>";
-        //echo " key page ". $value_page->ID ." => name ".$value_page->post_title."<br>";
+        
       }
 
       ?>
@@ -74,21 +70,12 @@ function UD_get_select_page_dropdown($role_key, $selected_role_key){
 }
 
 
-//echo "<pre>";
-//print_r($pages);
-//echo "<pre>";
-
-
-// foreach(get_r() as $key => $value){
-//   echo "Role : ". $key ." => name  ".$value['name']."<br>"; 
-// }
-
 ?>
 <div class="UD_container container">
 
   <div class="UD_plugin_head">
-    <h3>Welcome To User's direction <span class="UD-direction-icon"><img class="rounded" src="<?php echo plugins_url('/users-directions/assets/img/direction.png'); ?>" /></span></h3>
-    <p class="UD_plugin_quote">Easy to give direction to users on the basis of their role</p>
+    <h3> Welcome To User's direction <span class="UD-direction-icon"><img class="rounded" src="<?php echo plugins_url('/users-directions/assets/img/direction.png'); ?>" /></span></h3>
+    <p class="UD_plugin_quote">It's simple to provide users directions based on their roles.</p>
   </div>
   
   <div class="settig-section">
@@ -109,13 +96,13 @@ function UD_get_select_page_dropdown($role_key, $selected_role_key){
         
         <div class="UD_section_container">
           <h2 class="UD_big_head">General setup</h2>
-          <h3 class="UD_small_head">Select the user role and select the page where you want to redirect while logging in.</h2>
+          <h3 class="UD_small_head">While login in, pick the user role and the page to which you want to redirect.</h2>
         </div>
         <div class="setting-forms">
             <form id="form">
               
-              <div class="heading_table">
-                <div>Select the role of user and the appropriate pages ( <input type="checkbox" class="form-control" id="test" checked="checked"></input> tik to active redirection of particular role )</div>              
+              <div class="heading_table">               
+                <div> Choose a user role and the necessary pages ( <input type="checkbox" class="form-control" id="test" checked="checked"></input> tik to active redirection of particular role )</div>              
               </div>
 
               <div class="parent_container">
@@ -203,7 +190,7 @@ function UD_get_select_page_dropdown($role_key, $selected_role_key){
 
           <div class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input is_delete_data" id="defaultUnchecked" <?php if( UD_get_settings_plugin_data() == "true" ){ echo "checked='checked'"; }else{ echo ""; } ?> >
-            <label class="custom-control-label" for="defaultUnchecked">Do you wish to remove the plugin's data after it's been deactivated?</label>
+            <label class="custom-control-label" for="defaultUnchecked">Do you want to delete plugin data after the plugin has deactivated</label>
           </div>
 
           <div class="UD-btn-save mt-3">
