@@ -203,7 +203,7 @@ function UD_get_select_page_dropdown($role_key, $selected_role_key){
 
           <div class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input is_delete_data" id="defaultUnchecked" <?php if( UD_get_settings_plugin_data() == "true" ){ echo "checked='checked'"; }else{ echo ""; } ?> >
-            <label class="custom-control-label" for="defaultUnchecked">Do you want to delete plugin data after the plugin has deactivated</label>
+            <label class="custom-control-label" for="defaultUnchecked">Do you wish to remove the plugin's data after it's been deactivated?</label>
           </div>
 
           <div class="UD-btn-save mt-3">
